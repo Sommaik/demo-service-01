@@ -12,8 +12,11 @@ import com.example.demo.repository.SubjectRepository;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -70,5 +73,18 @@ public class SubjectController {
         Subject sub = new Subject();
         BeanUtils.copyProperties(dto, sub);
         return this.repo.save(sub);
+    }
+
+    @PutMapping()
+    public Subject updateSubject(@RequestBody SubjectDTO dto) {
+        Subject sub = new Subject();
+        BeanUtils.copyProperties(dto, sub);
+        return this.repo.save(sub);
+    }
+
+    @DeleteMapping("/{id}")
+    public int deleteSubject(@PathVariable(name = "id") Long id) {
+        this.repo.deleteById(id);
+        return 1;
     }
 }
