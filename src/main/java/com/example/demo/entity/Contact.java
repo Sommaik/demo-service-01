@@ -18,7 +18,7 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    int id;
+    Long id;
 
     @ManyToOne()
     @JoinColumn(name = "con_subject")
@@ -45,11 +45,11 @@ public class Contact {
     @Column(name = "update_by")
     String updateBy;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

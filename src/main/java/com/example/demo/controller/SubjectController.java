@@ -6,6 +6,7 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
+import com.example.demo.dto.DeleteResultDTO;
 import com.example.demo.dto.SubjectDTO;
 import com.example.demo.entity.Subject;
 import com.example.demo.repository.SubjectRepository;
@@ -83,8 +84,18 @@ public class SubjectController {
     }
 
     @DeleteMapping("/{id}")
-    public int deleteSubject(@PathVariable(name = "id") Long id) {
-        this.repo.deleteById(id);
-        return 1;
+    public DeleteResultDTO deleteSubject(@PathVariable(name = "id") Long id) {
+        DeleteResultDTO resp = new DeleteResultDTO();
+        if (this.repo.existsById(id)) {
+            this.repo.deleteById(id);
+            resp.setEffectRow(1);
+            resp.setSuccess(true);
+        } else {
+            resp.setSuccess(false);
+            resp.setEffectRow(0);
+            resp.setErrorMessage("NO_ID_FOUND");
+        }
+
+        return resp;
     }
 }

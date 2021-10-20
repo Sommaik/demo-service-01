@@ -14,7 +14,7 @@ public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    int id;
+    Long id;
 
     @Column(name = "code")
     String code;
@@ -22,11 +22,11 @@ public class Subject {
     @Column(name = "name")
     String name;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
