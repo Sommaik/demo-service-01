@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 
 import com.example.demo.dto.DeleteResultDTO;
 import com.example.demo.dto.SubjectDTO;
+import com.example.demo.dto.UpdateResultDTO;
 import com.example.demo.entity.Subject;
 import com.example.demo.repository.SubjectRepository;
 
@@ -50,7 +51,7 @@ public class SubjectController {
             ResultSet res = stmt.executeQuery(query);
 
             while (res.next()) {
-                int id = res.getInt("id");
+                Long id = res.getLong("id");
                 String code = res.getString("code");
                 String name = res.getString("name");
                 resp.add(new SubjectDTO(id, code, name));
@@ -77,10 +78,21 @@ public class SubjectController {
     }
 
     @PutMapping()
-    public Subject updateSubject(@RequestBody SubjectDTO dto) {
-        Subject sub = new Subject();
-        BeanUtils.copyProperties(dto, sub);
-        return this.repo.save(sub);
+    public UpdateResultDTO<Subject> updateSubject(@RequestBody SubjectDTO dto) {
+        UpdateResultDTO<Subject> resp = new UpdateResultDTO<>();
+
+        if (this.repo.existsById(dto.getId())) {
+            Subject sub = new Subject();
+            BeanUtils.copyProperties(dto, sub);
+            Subject respSub = this.repo.save(sub);
+            resp.setSuccess(true);
+            resp.setEffectRow(1);
+            resp.setResult(respSub);
+        } else {
+            resp.setSuccess(false);
+            resp.setEffectRow(0);
+        }
+        return resp;
     }
 
     @DeleteMapping("/{id}")
