@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.example.demo.dto.ContactDTO;
 import com.example.demo.dto.DeleteResultDTO;
 import com.example.demo.dto.UpdateResultDTO;
@@ -12,6 +14,7 @@ import com.example.demo.repository.ContactRepository;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +40,7 @@ public class ContactController {
     }
 
     @PostMapping()
-    public Contact createContact(@RequestBody ContactDTO dto) {
+    public Contact createContact(@RequestBody ContactDTO dto, Authentication auth, HttpServletRequest request) {
         Contact cnt = new Contact();
         BeanUtils.copyProperties(dto, cnt);
         // this.subRepo.getById(dto.g)
@@ -45,6 +48,9 @@ public class ContactController {
         sub.setId(dto.getSubjectId());
         cnt.setSubject(sub);
         cnt.setCreateDate(new Date());
+        cnt.setCreateByIp(request.getRemoteAddr());
+        // cnt.setUpdateBy(auth.getName());
+        cnt.setComment(auth.getName());
         return this.repo.save(cnt);
     }
 
